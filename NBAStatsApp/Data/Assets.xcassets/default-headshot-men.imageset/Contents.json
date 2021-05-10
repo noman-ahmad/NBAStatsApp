@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "default-headshot-men.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "defaultplayer.jpeg",
       "idiom" : "universal",
       "scale" : "2x"
     },

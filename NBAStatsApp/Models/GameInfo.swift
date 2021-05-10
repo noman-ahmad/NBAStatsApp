@@ -19,6 +19,7 @@ struct GameInfo: Decodable {
     let visitor_team_score: Int
     let date: String
     let season: Int
+    let period: Int
     let home_team: TeamInfo
     let visitor_team: TeamInfo
 }

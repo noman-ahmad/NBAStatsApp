@@ -17,6 +17,13 @@ class InitialTeamViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let defaults = UserDefaults.standard
+        let colors_on = defaults.bool(forKey: "dark_mode")
+        if colors_on {
+            overrideUserInterfaceStyle = .dark
+        } else {
+            overrideUserInterfaceStyle = .light
+        }
         self.navigationItem.title = "NBA"
         downloadTeamData {
             self.teamTableView.reloadData()
@@ -46,13 +53,17 @@ class InitialTeamViewController: UIViewController, UITableViewDelegate, UITableV
             destination.currentTeam = teams[(teamTableView.indexPathForSelectedRow?.row)!]
             destination.players = self.players
         }
-        let sound = Bundle.main.path(forResource: "swoosh", ofType: ".mp3")
-        do {
-            audio_player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
-        } catch {
-            debugPrint(error)
+        let defaults = UserDefaults.standard
+        let sound_on = defaults.bool(forKey: "sounds")
+        if sound_on {
+            let sound = Bundle.main.path(forResource: "swoosh", ofType: ".mp3")
+            do {
+                audio_player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
+            } catch {
+                debugPrint(error)
+            }
+            audio_player.play()
         }
-        audio_player.play()
 
     }
     

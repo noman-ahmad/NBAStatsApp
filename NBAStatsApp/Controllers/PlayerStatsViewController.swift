@@ -8,18 +8,9 @@
 import UIKit
 
 class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet weak var teamImage: UIImageView!
-    
-    @IBOutlet weak var playerImage: UIImageView!
-    
-    @IBOutlet weak var playerName: UILabel!
-    
-    @IBOutlet weak var playerHeight: UILabel!
-    @IBOutlet weak var playerPosition: UILabel!
-    @IBOutlet weak var playerTeam: UILabel!
-    @IBOutlet weak var careerStatsLabel: UILabel!
-    @IBOutlet weak var careerTableView: UITableView!
 
+    @IBOutlet weak var statsTableView: UITableView!
+    
     var has_data = true
     
     var currentPlayerStats: [PlayerStats]?
@@ -29,56 +20,49 @@ class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableV
     var playerStats = [PlayerStats]()
     
     override func viewDidLoad() {
+        self.statsTableView.delegate = self
+        self.statsTableView.dataSource = self
         super.viewDidLoad()
-        self.navigationItem.title = (currentPlayer!.first_name + " " + currentPlayer!.last_name)
-        self.playerName.text = currentPlayer!.first_name + " " + currentPlayer!.last_name
-        self.playerTeam.text = currentPlayer?.team.full_name
-        self.careerStatsLabel.text = "Career Stats"
-       // self.playerHeight.text = String((currentPlayer?.height_feet)!) + " ' " + String((currentPlayer?.height_inches)!)
-        self.playerImage.downloaded(from: ("https://nba-players.herokuapp.com/players/" + (currentPlayer?.last_name.lowercased())! + "/" + (currentPlayer?.first_name.lowercased())!) )
-        self.teamImage.downloaded(from: "http://i.cdn.turner.com/nba/nba/.element/img/1.0/teamsites/logos/teamlogos_500x500/" + "\((currentPlayer?.team.abbreviation)!.lowercased())" + ".png")
-        if self.currentPlayer?.position == "" {
-            self.playerPosition.font = UIFont(name: "System", size: 18)
-            self.playerPosition.text = "Unknown Position"
+        let defaults = UserDefaults.standard
+        let colors_on = defaults.bool(forKey: "dark_mode")
+        if colors_on {
+            overrideUserInterfaceStyle = .dark
         } else {
-            self.playerPosition.text = self.currentPlayer?.position
+            overrideUserInterfaceStyle = .light
         }
-        let seconds = 0.25
-        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+        self.navigationItem.title = (currentPlayer!.first_name + " " + currentPlayer!.last_name)
             // Put your code which should be executed with a delay here
-            self.getCurrentData {
-                print("Got Player Data")
-            }
-            self.careerTableView.delegate = self
-            self.careerTableView.dataSource = self
-            self.careerTableView.reloadData()
+        self.getCurrentData {
+            print("Got Player Data")
+            self.statsTableView.reloadData()
         }
+        
         
         // Do any additional setup after loading the view.
     }
     
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return playerStats.count + 1
+        return playerStats.count + 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let defaults = UserDefaults.standard
         let color_on = defaults.bool(forKey: "color")
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.font = UIFont(name: "Avenir-Black", size: 12)
         if indexPath.row == 0 {
-            cell.textLabel?.text = "Season               Pts      Reb      Ast      Stl      Blk      Ft"
-        } else {
-            let label = String(playerStats[indexPath.row-1].season) + "-" + String(playerStats[indexPath.row-1].season + 1) + "         " +  String(((playerStats[indexPath.row-1].pts) * 10).rounded() / 10) + "    " + String(((playerStats[indexPath.row-1].reb) * 10).rounded() / 10) + "       " +   String(((playerStats[indexPath.row-1].ast) * 10).rounded() / 10) + "       " +
-                String(((playerStats[indexPath.row-1].stl) * 10).rounded() / 10) + "    " + String(((playerStats[indexPath.row-1].blk) * 10).rounded() / 10) + "    " + String(((playerStats[indexPath.row-1].ft_pct * 100) * 1).rounded() / 1)
-            cell.textLabel?.text = label
+            let cell = tableView.dequeueReusableCell(withIdentifier: "playerInfo", for: indexPath) as! PlayerInfoTableViewCell
+            cell.configurePlayerInfo(forPlayer: currentPlayer!)
+            return cell
         }
-        if color_on {
-            cell.textLabel?.textColor = UIColor.blue
+        if indexPath.row == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "playerStats", for: indexPath) as! PlayerStatsTableViewCell
+            cell.configureInitial()
+            return cell
         } else {
-            cell.textLabel?.textColor = UIColor.black
+            let cell = tableView.dequeueReusableCell(withIdentifier: "playerStats", for: indexPath) as! PlayerStatsTableViewCell
+            cell.configureStats(forStats: self.playerStats[indexPath.row-2])
+            return cell
         }
-        return cell
     }
     
     func getCurrentData(completed: @escaping () -> ()) {

@@ -15,49 +15,80 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         downloadAllPlayerData()
         let defaults = UserDefaults.standard
-        let colors_on = defaults.bool(forKey: "color")
+        let colors_on = defaults.bool(forKey: "dark_mode")
+        let sound_on = defaults.bool(forKey: "sounds")
         self.InitialButton.isEnabled = false
         self.ColorSwitch.setOn(colors_on, animated: false)
-        let seconds = 1.0
+        self.SoundSwitch.setOn(sound_on, animated: false)
+        if colors_on{
+            overrideUserInterfaceStyle = .dark
+        } else {
+            overrideUserInterfaceStyle = .light
+        }
+        let seconds = 2.0
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
             // Put your code which should be executed with a delay here
             self.InitialButton.isEnabled = true
         }
         
     }
+    @IBOutlet weak var SoundSwitch: UISwitch!
     @IBOutlet weak var ColorSwitch: UISwitch!
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? InitialTeamViewController {
             destination.players = allPlayers
         }
-        let sound = Bundle.main.path(forResource: "swoosh", ofType: ".mp3")
-        do {
-            audio_player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
-        } catch {
-            debugPrint(error)
+        let defaults = UserDefaults.standard
+        let sound_on = defaults.bool(forKey: "sounds")
+        if sound_on {
+            let sound = Bundle.main.path(forResource: "swoosh", ofType: ".mp3")
+            do {
+                audio_player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
+            } catch {
+                debugPrint(error)
+            }
+            audio_player.play()
         }
-        audio_player.play()
     }
     
 
     @IBAction func toggleColor(_ sender: Any) {
         if self.ColorSwitch.isOn {
             let defaults = UserDefaults.standard
-            var colors_on = defaults.bool(forKey: "color")
+            var colors_on = defaults.bool(forKey: "dark_mode")
             colors_on.toggle()
-            defaults.set(colors_on, forKey: "color")
+            defaults.set(colors_on, forKey: "dark_mode")
             self.ColorSwitch.setOn(colors_on, animated: true)
-            print(defaults.bool(forKey: "color"))
+            print(defaults.bool(forKey: "dark_mode"))
         } else {
             let defaults = UserDefaults.standard
-            var colors_on = defaults.bool(forKey: "color")
+            var colors_on = defaults.bool(forKey: "dark_mode")
             colors_on.toggle()
-            defaults.set(colors_on, forKey: "color")
+            defaults.set(colors_on, forKey: "dark_mode")
             self.ColorSwitch.setOn(colors_on, animated: true)
-            print(defaults.bool(forKey: "color"))
+            print(defaults.bool(forKey: "dark_mode"))
         }
     }
+    
+    @IBAction func toggleSound(_ sender: Any) {
+        if self.SoundSwitch.isOn {
+            let defaults = UserDefaults.standard
+            var sound_on = defaults.bool(forKey: "sounds")
+            sound_on.toggle()
+            defaults.set(sound_on, forKey: "sounds")
+            self.SoundSwitch.setOn(sound_on, animated: true)
+           print(defaults.bool(forKey: "sounds"))
+        } else {
+            let defaults = UserDefaults.standard
+            var sound_on = defaults.bool(forKey: "sounds")
+            sound_on.toggle()
+            defaults.set(sound_on, forKey: "sounds")
+            self.SoundSwitch.setOn(sound_on, animated: true)
+            print(defaults.bool(forKey: "sounds"))
+        }
+    }
+    
     @IBOutlet weak var InitialButton: UIButton!
     
     var allPlayers = [PlayerInfo]()

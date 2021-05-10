@@ -9,6 +9,28 @@ import UIKit
 import AVFoundation
 
 // MARK: - Extensions
+var imageCache = NSCache<AnyObject, AnyObject>()
+extension UIImageView {
+    func load(from urlString: String) {
+        if let image = imageCache.object(forKey: urlString as NSString) as? UIImage {
+            self.image = image
+            return
+        }
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        DispatchQueue.global().async {[weak self] in
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        imageCache.setObject(image, forKey: urlString as NSString)
+                        self?.image = image
+                    }
+                }
+            }
+        }
+    }
+}
 extension UIImageView {
     func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFit) {
         contentMode = mode
@@ -20,7 +42,7 @@ extension UIImageView {
                 let image = UIImage(data: data)
                 else {
                     DispatchQueue.main.async() { [weak self] in
-                    self?.image = #imageLiteral(resourceName: "defaultplayer")
+                    self?.image = #imageLiteral(resourceName: "default-headshot-men")
                 }
                 return
             }
@@ -38,82 +60,80 @@ extension UIImageView {
 class TeamViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var audio_player = AVAudioPlayer()
     // MARK: - Outlets & Variables
-    @IBOutlet weak var teamNameLabel: UILabel!
-    @IBOutlet weak var teamLogoView: UIImageView!
-    @IBOutlet weak var teamRecord: UILabel!
-    
-    @IBOutlet weak var teamConference: UILabel!
-    @IBOutlet weak var teamDivision: UILabel!
     @IBOutlet weak var PlayersButton: UIBarButtonItem!
-    @IBOutlet weak var upcomingGame: UILabel!
-    @IBOutlet weak var teamAbbr: UILabel!
-    
+
     var games = [GameInfo]()
     var nextGame:GameInfo?
     var wins : Int = 0
     var losses: Int = 0
     var players:[PlayerInfo]?
     
-    @IBOutlet weak var recentGames: UILabel!
+    var allPlayerStats = [PlayerStats]()
+    var teamplayers = [PlayerInfo]()
+    
+
     @IBOutlet weak var gamesTableView: UITableView!
    
     var currentTeam:TeamInfo?
     
-    @IBOutlet weak var nextOpponent: UIImageView!
     
     
     // MARK: - On Load
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = currentTeam?.abbreviation
+        let defaults = UserDefaults.standard
+        let colors_on = defaults.bool(forKey: "dark_mode")
+        if colors_on {
+            overrideUserInterfaceStyle = .dark
+        } else {
+            overrideUserInterfaceStyle = .light
+        }
         PlayersButton.title = "See Players"
+        PlayersButton.isEnabled = false
         
-        teamNameLabel.text = currentTeam?.full_name
-        
-        teamDivision.text = currentTeam!.division + " Division"
-        
-        teamConference.text = currentTeam!.conference + " Conference"
-        
-        teamAbbr.text = currentTeam!.abbreviation
-        
-        recentGames.text = "Games in 2020-21 Season"
+        self.navigationItem.hidesBackButton = true
         
         
-        let imageUrl = "http://i.cdn.turner.com/nba/nba/.element/img/1.0/teamsites/logos/teamlogos_500x500/" + "\((currentTeam?.abbreviation)!.lowercased())" + ".png"
-        
-        let url = URL(string: imageUrl)
-        
-        teamLogoView.downloaded(from: url!)
-        
-        downloadGameData { [self] in
+        downloadGameData {
+                // Put your code which should be executed with a delay here
             self.gamesTableView.reloadData()
-            teamRecord.text = String(self.wins) + "W-" + String(self.losses) + "L"
-            let start_date = nextGame!.date.index(nextGame!.date.startIndex, offsetBy: 5)
-            let end_date = nextGame!.date.index(nextGame!.date.startIndex, offsetBy: 9)
-            let range = start_date...end_date
-            let formatted_date = String(nextGame!.date[range])
-            var add_to_label = "Upcoming Game: " + formatted_date
-            var opposing_team = ""
-            if nextGame?.home_team.id == currentTeam?.id{
-                add_to_label = add_to_label + " vs. " + (nextGame?.visitor_team.abbreviation)!
-                opposing_team = (nextGame?.visitor_team.abbreviation)!
-            } else {
-                add_to_label = add_to_label + " @ " + (nextGame?.home_team.abbreviation)!
-                opposing_team = (nextGame?.home_team.abbreviation)!
+//            let start_date = nextGame!.date.index(nextGame!.date.startIndex, offsetBy: 5)
+//            let end_date = nextGame!.date.index(nextGame!.date.startIndex, offsetBy: 9)
+//            let range = start_date...end_date
+//            let formatted_date = String(nextGame!.date[range])
+//            var add_to_label = "Upcoming Game: " + formatted_date
+//            if nextGame?.home_team.id == currentTeam?.id{
+//                add_to_label = add_to_label + " vs. " + (nextGame?.visitor_team.abbreviation)!
+//            } else {
+//                add_to_label = add_to_label + " @ " + (nextGame?.home_team.abbreviation)!
+//                opposing_team = (nextGame?.home_team.abbreviation)!
+//            }
+            
+            self.getPlayerforTeam {
+                print("Got All Players")
+                print(self.teamplayers)
             }
             
-            upcomingGame.text = add_to_label
+            self.downloadAllSeasonStatsData() {
+            }
+            
+            let seconds = 5.5
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                // Put your code which should be executed with a delay here
+                self.PlayersButton.isEnabled = true
+            }
+            
+            let backseconds = 40.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + backseconds) {
+                // Put your code which should be executed with a delay here
+                self.navigationItem.hidesBackButton = false
+            }
             
             
-            let opposingTeamUrl = "http://i.cdn.turner.com/nba/nba/.element/img/1.0/teamsites/logos/teamlogos_500x500/" + "\((opposing_team).lowercased())" + ".png"
             
-            let url = URL(string: opposingTeamUrl)
-            
-            nextOpponent.downloaded(from: url!)
         }
         
-        let defaults = UserDefaults.standard
-        print(defaults.bool(forKey: "color"))
         
         gamesTableView.delegate = self
         gamesTableView.dataSource = self
@@ -122,65 +142,88 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // MARK: - Table View Functions
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return games.count
+        return games.count + 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let defaults = UserDefaults.standard
-        let color_on = defaults.bool(forKey: "color")
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        let current_game = games[indexPath.row]
-        let month_day = current_game.date
-        let start_date = month_day.index(month_day.startIndex, offsetBy: 5)
-        let end_date = month_day.index(month_day.startIndex, offsetBy: 9)
-        let range = start_date...end_date
-        let formatted_date = String(month_day[range])
-        var add_to_label = ""
-        var color = UIColor.black
-        // if it is the home team
-        if current_game.home_team.id == currentTeam!.id {
-            if current_game.home_team_score > current_game.visitor_team_score {
-                add_to_label = formatted_date + ": W vs. " + current_game.visitor_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
-                if (color_on == true) {
-                    color = UIColor.systemGreen
-                }
-            } else {
-                add_to_label = formatted_date + ": L vs. " + current_game.visitor_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
-                if (color_on == true) {
-                    color = UIColor.systemRed
-                }
+        
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "teamInfo", for: indexPath) as! TeamInfoTableViewCell
+            cell.configure(forTeam: self.currentTeam!, forWins: self.wins, forLosses: self.losses)
+            return cell
+        } else if indexPath.row == 1{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "nextGame", for: indexPath) as! NextGameTableViewCell
+            if nextGame != nil {
+                cell.configureNextGame(forGame: nextGame!)
             }
-        } else {
-            if current_game.home_team_score > current_game.visitor_team_score {
-                add_to_label = formatted_date + ": L @ " + current_game.home_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
-                if (color_on == true) {
-                    color = UIColor.systemRed
-                }
-            } else {
-                add_to_label = formatted_date + ": W @ " + current_game.home_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
-                if (color_on == true) {
-                    color = UIColor.systemGreen
-                }
-            }
+            return cell
+        } else{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "previousGame", for: indexPath) as! PreviousGamesTableViewCell
+            cell.configurePrevGame(forGame: games[indexPath.row-2], forTeam: currentTeam!)
+            return cell
         }
-        cell.textLabel?.text = add_to_label
-        cell.textLabel?.textColor = color
-        cell.textLabel?.textAlignment = .center
-        return cell
+        
+//        let defaults = UserDefaults.standard
+//        let color_on = defaults.bool(forKey: "color")
+//        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+//        let current_game = games[indexPath.row]
+//        let month_day = current_game.date
+//        let start_date = month_day.index(month_day.startIndex, offsetBy: 5)
+//        let end_date = month_day.index(month_day.startIndex, offsetBy: 9)
+//        let range = start_date...end_date
+//        let formatted_date = String(month_day[range])
+//        var add_to_label = ""
+//        var color = UIColor.black
+//        // if it is the home team
+//        if current_game.home_team.id == currentTeam!.id {
+//            if current_game.home_team_score > current_game.visitor_team_score {
+//                add_to_label = formatted_date + ": W vs. " + current_game.visitor_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
+//                if (color_on == true) {
+//                    color = UIColor.systemGreen
+//                }
+//            } else {
+//                add_to_label = formatted_date + ": L vs. " + current_game.visitor_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
+//                if (color_on == true) {
+//                    color = UIColor.systemRed
+//                }
+//            }
+//        } else {
+//            if current_game.home_team_score > current_game.visitor_team_score {
+//                add_to_label = formatted_date + ": L @ " + current_game.home_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
+//                if (color_on == true) {
+//                    color = UIColor.systemRed
+//                }
+//            } else {
+//                add_to_label = formatted_date + ": W @ " + current_game.home_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
+//                if (color_on == true) {
+//                    color = UIColor.systemGreen
+//                }
+//            }
+//        }
+//        cell.textLabel?.text = add_to_label
+//        cell.textLabel?.textColor = color
+//        cell.textLabel?.textAlignment = .center
+//        return cell
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? PlayersViewController {
             destination.currentTeam = currentTeam
             destination.allPlayers = self.players
+            destination.allPlayerStats = self.allPlayerStats
+            destination.players = self.teamplayers
         }
-        let sound = Bundle.main.path(forResource: "swoosh", ofType: ".mp3")
-        do {
-            audio_player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
-        } catch {
-            debugPrint(error)
+        let defaults = UserDefaults.standard
+        let sound_on = defaults.bool(forKey: "sounds")
+        if sound_on {
+            let sound = Bundle.main.path(forResource: "swoosh", ofType: ".mp3")
+            do {
+                audio_player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
+            } catch {
+                debugPrint(error)
+            }
+            audio_player.play()
         }
-        audio_player.play()
 
     }
     
@@ -199,13 +242,13 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let result = try JSONDecoder().decode(GameData.self, from: data!)
                     for data in result.data {
                         self.games.append(data)
-                        if data.home_team.id == currentTeam!.id && data.home_team_score != 0{
+                        if (data.home_team.id == currentTeam!.id) && (data.home_team_score != 0) && (data.period >= 4){
                             if data.home_team_score > data.visitor_team_score {
                                 self.wins = self.wins + 1
                             } else {
                                 self.losses = self.losses + 1
                             }
-                        } else if data.home_team.id != currentTeam!.id && data.home_team_score != 0 {
+                        } else if (data.home_team.id != currentTeam!.id) && (data.home_team_score != 0) && (data.period >= 4) {
                             if data.visitor_team_score > data.home_team_score {
                                 self.wins = self.wins + 1
                             } else{
@@ -213,13 +256,19 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                             }
                         }
                     }
-                    print(self.wins)
+                    //print(self.wins)
                     self.games.sort(by: {$0.date > $1.date})
-                    print(self.games[0])
+                    //print(self.games[0])
                     
                     for i in 0...self.games.count {
                         if (self.games[i].home_team_score == 0) && (self.games[i+1].home_team_score != 0) {
                             nextGame = self.games[i]
+                            print("Got Next Game")
+                            if nextGame == nil {
+                                print("Nil")
+                            } else {
+                                print("Not nil")
+                            }
                             break
                         }
                     }
@@ -234,6 +283,66 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }.resume()
         
+    }
+    
+    func getPlayerforTeam(completed: @escaping () -> ()) {
+        for i in 0...players!.count-1 {
+            let currentPlayer = players![i]
+            if currentPlayer.team.id == self.currentTeam!.id {
+                let roster = TeamsPlayers[self.currentTeam!.full_name]
+                for j in 0...roster!.count-1{
+                    if roster![j] == currentPlayer.id{
+                        teamplayers.append(currentPlayer)
+                    }
+                }
+            }
+        }
+        teamplayers.sort(by: {$0.last_name < $1.last_name})
+        DispatchQueue.main.async {
+            completed()
+        }
+    }
+    
+    
+    
+    // MARK: - API Functionality
+    func downloadStatsData(season: Int, completed: @escaping () -> ()) {
+       var baseurl = "https://www.balldontlie.io/api/v1/season_averages?season=" + String(season)
+        for i in 0...teamplayers.count-1 {
+            baseurl = baseurl + "&player_ids[]=" + String(teamplayers[i].id)
+        }
+        let url = URL(string: baseurl)
+        URLSession.shared.dataTask(with: url!) {
+            (data, response, error) in
+            // if data is available
+            if error == nil {
+                do {
+                    let result = try JSONDecoder().decode(StatsData.self, from: data!)
+                    for data in result.data {
+                        self.allPlayerStats.append(data)
+                        //print(data)
+                    }
+                    DispatchQueue.main.async {
+                        completed()
+                    }
+                } catch {
+                    print("API CALL Limit")
+                    //debugPrint(error)
+                }
+            }
+        }.resume()
+    }
+    
+    func downloadAllSeasonStatsData(completed: @escaping () -> ()) {
+        for i in 0...20  {
+            downloadStatsData(season: 2020 - i) {
+               // print("Got Data For Season: ")
+                self.allPlayerStats.sort(by: {$0.season > $1.season})
+            }
+        }
+        DispatchQueue.main.async {
+            completed()
+        }
     }
     
 }
