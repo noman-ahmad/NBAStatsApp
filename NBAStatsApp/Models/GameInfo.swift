@@ -15,11 +15,12 @@ struct GameData: Decodable{
 
 struct GameInfo: Decodable {
     let id: Int
-    let home_team_score: Int
-    let visitor_team_score: Int
-    let date: String
-    let season: Int
-    let period: Int
-    let home_team: TeamInfo
-    let visitor_team: TeamInfo
+    let home_team_score: Int?
+    let visitor_team_score: Int?
+    let date: String?
+    let season: Int?
+    let period: Int?
+    let home_team: TeamInfo?
+    let visitor_team: TeamInfo?
+    let status: String?
 }

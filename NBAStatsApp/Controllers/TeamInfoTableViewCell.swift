@@ -34,7 +34,7 @@ class TeamInfoTableViewCell: UITableViewCell {
         teamRecord.text = String(forWins) + "W-" + String(forLosses) + "L"
         let teamurl = "http://i.cdn.turner.com/nba/nba/.element/img/1.0/teamsites/logos/teamlogos_500x500/" + "\((forTeam.abbreviation).lowercased())" + ".png"
         let url = URL(string: teamurl)
-        teamImage.downloaded(from: url!)
+        teamImage.load2(url: url!, placeholder: nil)
         nbaLogo.image = #imageLiteral(resourceName: "nba-logo-1.jpg")
     }
 

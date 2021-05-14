@@ -56,6 +56,29 @@ extension UIImageView {
         downloaded(from: url, contentMode: mode)
     }
 }
+extension UIImageView {
+    /// Loads image from web asynchronosly and caches it, in case you have to load url
+    /// again, it will be loaded from cache if available
+    func load2(url: URL, placeholder: UIImage?, cache: URLCache? = nil) {
+        let cache = cache ?? URLCache.shared
+        let request = URLRequest(url: url)
+        if let data = cache.cachedResponse(for: request)?.data, let image = UIImage(data: data) {
+            self.image = image
+        } else {
+            self.image = placeholder
+            URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+                if let data = data, let response = response, ((response as? HTTPURLResponse)?.statusCode ?? 500) < 300, let image = UIImage(data: data) {
+                    let cachedData = CachedURLResponse(response: response, data: data)
+                    cache.storeCachedResponse(cachedData, for: request)
+                    DispatchQueue.main.async {
+                        self.image = image
+                    }
+                }
+            }).resume()
+        }
+    }
+}
+
 
 class TeamViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var audio_player = AVAudioPlayer()
@@ -206,12 +229,20 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
 //        return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "showGameStats", sender: self)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? PlayersViewController {
             destination.currentTeam = currentTeam
             destination.allPlayers = self.players
             destination.allPlayerStats = self.allPlayerStats
             destination.players = self.teamplayers
+        }
+        if let destination = segue.destination as? GameStatsViewController {
+            destination.currentGame = games[(gamesTableView.indexPathForSelectedRow?.row)!-2]
+            destination.players = self.players
         }
         let defaults = UserDefaults.standard
         let sound_on = defaults.bool(forKey: "sounds")
@@ -242,14 +273,14 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let result = try JSONDecoder().decode(GameData.self, from: data!)
                     for data in result.data {
                         self.games.append(data)
-                        if (data.home_team.id == currentTeam!.id) && (data.home_team_score != 0) && (data.period >= 4){
-                            if data.home_team_score > data.visitor_team_score {
+                        if (data.home_team!.id == currentTeam!.id) && (data.home_team_score! != 0) && (data.period! >= 4){
+                            if data.home_team_score! > data.visitor_team_score! {
                                 self.wins = self.wins + 1
                             } else {
                                 self.losses = self.losses + 1
                             }
-                        } else if (data.home_team.id != currentTeam!.id) && (data.home_team_score != 0) && (data.period >= 4) {
-                            if data.visitor_team_score > data.home_team_score {
+                        } else if (data.home_team!.id != currentTeam!.id) && (data.home_team_score != 0) && (data.period! >= 4) {
+                            if data.visitor_team_score! > data.home_team_score! {
                                 self.wins = self.wins + 1
                             } else{
                                 self.losses = self.losses + 1
@@ -257,7 +288,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                         }
                     }
                     //print(self.wins)
-                    self.games.sort(by: {$0.date > $1.date})
+                    self.games.sort(by: {$0.date! > $1.date!})
                     //print(self.games[0])
                     
                     for i in 0...self.games.count {
@@ -288,7 +319,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     func getPlayerforTeam(completed: @escaping () -> ()) {
         for i in 0...players!.count-1 {
             let currentPlayer = players![i]
-            if currentPlayer.team.id == self.currentTeam!.id {
+            if currentPlayer.team!.id == self.currentTeam!.id {
                 let roster = TeamsPlayers[self.currentTeam!.full_name]
                 for j in 0...roster!.count-1{
                     if roster![j] == currentPlayer.id{

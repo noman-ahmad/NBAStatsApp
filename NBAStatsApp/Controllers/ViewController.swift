@@ -69,6 +69,27 @@ class ViewController: UIViewController {
             self.ColorSwitch.setOn(colors_on, animated: true)
             print(defaults.bool(forKey: "dark_mode"))
         }
+           // Create the action buttons for the alert.
+           let defaultAction = UIAlertAction(title: "Agree",
+                                style: .default) { (action) in
+            // Respond to user selection of the action.
+           }
+           
+           // Create and configure the alert controller.
+           let alert = UIAlertController(title: "Dark Mode",
+                 message: "Dark Mode has changed",
+                 preferredStyle: .alert)
+           alert.addAction(defaultAction)
+                
+           self.present(alert, animated: true) {
+              // The alert was presented
+           }
+        
+        if self.ColorSwitch.isOn {
+            self.overrideUserInterfaceStyle = .dark
+        } else {
+            self.overrideUserInterfaceStyle = .light
+        }
     }
     
     @IBAction func toggleSound(_ sender: Any) {

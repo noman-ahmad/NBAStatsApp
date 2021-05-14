@@ -20,7 +20,7 @@ struct PlayerInfo: Decodable {
     let height_feet: Int?
     let height_inches: Int?
     let weight_pounds: Int?
-    let team: TeamInfo
+    let team: TeamInfo?
 }
 
 
