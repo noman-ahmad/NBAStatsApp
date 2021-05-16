@@ -42,7 +42,7 @@ class NextGameTableViewCell: UITableViewCell {
             let formatted_date = String(forGame.date![range])
         let newString = formatted_date.replacingOccurrences(of: "-", with: "/", options: .literal, range: nil)
         
-        date.text = "Next Game: " + newString
+        date.text = "Upcoming Game: " + newString
     }
 
 }

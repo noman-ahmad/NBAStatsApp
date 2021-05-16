@@ -31,7 +31,7 @@ class InitialTeamViewController: UIViewController, UITableViewDelegate, UITableV
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
 
-        self.navigationItem.title = "NBA"
+        self.navigationItem.title = "Pick A Team"
         downloadTeamData {
             self.teamTableView.reloadData()
         }
