@@ -63,7 +63,7 @@ class PreviousGamesTableViewCell: UITableViewCell {
                 outcome.textColor = .systemGreen
             }
         }
-        if forGame.period != 4 {
+        if forGame.period! > 4 && forGame.status != "Final"{
             outcome.text = outcome.text! + "/OT"
         }
         let start_date = forGame.date!.index(forGame.date!.startIndex, offsetBy: 5)
