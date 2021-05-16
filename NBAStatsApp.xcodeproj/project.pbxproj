@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ED00EF522650DBED00E006A8 /* ballicon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ED00EF512650DBED00E006A8 /* ballicon.jpg */; };
 		ED0504E1264EFFC200CAB039 /* default-headshot-men.png in Resources */ = {isa = PBXBuildFile; fileRef = ED0504E0264EFFC200CAB039 /* default-headshot-men.png */; };
 		ED0504E6264F480300CAB039 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = ED0504E5264F480300CAB039 /* Kingfisher */; };
 		ED2B8642264DEDC700666D4D /* GameStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B8641264DEDC700666D4D /* GameStatsViewController.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ED00EF512650DBED00E006A8 /* ballicon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ballicon.jpg; sourceTree = "<group>"; };
 		ED0504E0264EFFC200CAB039 /* default-headshot-men.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-headshot-men.png"; sourceTree = "<group>"; };
 		ED2B8641264DEDC700666D4D /* GameStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsViewController.swift; sourceTree = "<group>"; };
 		ED2B8643264DFA5600666D4D /* GameTeamInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTeamInfoTableViewCell.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		EDC17F942642FCF100A80F32 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				ED00EF512650DBED00E006A8 /* ballicon.jpg */,
 				ED6A0D822650B50D003337B2 /* playoffs1.png */,
 				ED0504E0264EFFC200CAB039 /* default-headshot-men.png */,
 				EDFC725B2648A801004FF45A /* nba-logo-1.jpg */,
@@ -292,6 +295,7 @@
 				EDFB951B2636E45400A55C12 /* LaunchScreen.storyboard in Resources */,
 				EDFB95182636E45400A55C12 /* Assets.xcassets in Resources */,
 				EDFB95162636E45300A55C12 /* Main.storyboard in Resources */,
+				ED00EF522650DBED00E006A8 /* ballicon.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,7 +406,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -457,7 +461,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
