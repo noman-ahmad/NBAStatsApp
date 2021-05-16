@@ -3,21 +3,24 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ED0504E1264EFFC200CAB039 /* default-headshot-men.png in Resources */ = {isa = PBXBuildFile; fileRef = ED0504E0264EFFC200CAB039 /* default-headshot-men.png */; };
+		ED0504E6264F480300CAB039 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = ED0504E5264F480300CAB039 /* Kingfisher */; };
 		ED2B8642264DEDC700666D4D /* GameStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B8641264DEDC700666D4D /* GameStatsViewController.swift */; };
 		ED2B8644264DFA5600666D4D /* GameTeamInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B8643264DFA5600666D4D /* GameTeamInfoTableViewCell.swift */; };
 		ED2B8646264E156400666D4D /* StatsTeamTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B8645264E156400666D4D /* StatsTeamTableViewCell.swift */; };
 		ED2B8648264E1A4F00666D4D /* GamePlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B8647264E1A4F00666D4D /* GamePlayerTableViewCell.swift */; };
+		ED338A04265069FB007495D5 /* PositionFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED338A03265069FB007495D5 /* PositionFilterViewController.swift */; };
 		ED405AF8264DDF070024CDE7 /* GameStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED405AF7264DDF070024CDE7 /* GameStats.swift */; };
+		ED6A0D832650B50D003337B2 /* playoffs1.png in Resources */ = {isa = PBXBuildFile; fileRef = ED6A0D822650B50D003337B2 /* playoffs1.png */; };
 		EDC17F8E2642E10E00A80F32 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDC17F8D2642E10E00A80F32 /* AVFoundation.framework */; };
 		EDC17F972642FD0600A80F32 /* swoosh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = EDC17F962642FD0600A80F32 /* swoosh.mp3 */; };
 		EDC17F9F2643156B00A80F32 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC17F9E2643156B00A80F32 /* CustomTableViewCell.swift */; };
 		EDDD7FC6263EEA6100D395B8 /* PlayerStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDD7FC5263EEA6100D395B8 /* PlayerStatsViewController.swift */; };
 		EDE388C12648495700EB4581 /* PlayerInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE388C02648495700EB4581 /* PlayerInfoTableViewCell.swift */; };
-		EDE388C52648613800EB4581 /* defaulthead.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EDE388C42648613800EB4581 /* defaulthead.jpg */; };
 		EDE388C9264861F600EB4581 /* PlayerStatsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE388C8264861F600EB4581 /* PlayerStatsTableViewCell.swift */; };
 		EDE475EB263C128A0096E7B9 /* PlayersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE475EA263C128A0096E7B9 /* PlayersViewController.swift */; };
 		EDE475EE263C12AB0096E7B9 /* PlayerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE475ED263C12AB0096E7B9 /* PlayerInfo.swift */; };
@@ -37,22 +40,23 @@
 		EDFC72562648A637004FF45A /* NextGameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFC72552648A637004FF45A /* NextGameTableViewCell.swift */; };
 		EDFC72592648A64D004FF45A /* PreviousGamesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFC72582648A64D004FF45A /* PreviousGamesTableViewCell.swift */; };
 		EDFC725C2648A801004FF45A /* nba-logo-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EDFC725B2648A801004FF45A /* nba-logo-1.jpg */; };
-		EDFC72642648E74C004FF45A /* default-headshot-men.png in Resources */ = {isa = PBXBuildFile; fileRef = EDFC72632648E74C004FF45A /* default-headshot-men.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ED0504E0264EFFC200CAB039 /* default-headshot-men.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-headshot-men.png"; sourceTree = "<group>"; };
 		ED2B8641264DEDC700666D4D /* GameStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsViewController.swift; sourceTree = "<group>"; };
 		ED2B8643264DFA5600666D4D /* GameTeamInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTeamInfoTableViewCell.swift; sourceTree = "<group>"; };
 		ED2B8645264E156400666D4D /* StatsTeamTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsTeamTableViewCell.swift; sourceTree = "<group>"; };
 		ED2B8647264E1A4F00666D4D /* GamePlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlayerTableViewCell.swift; sourceTree = "<group>"; };
+		ED338A03265069FB007495D5 /* PositionFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionFilterViewController.swift; sourceTree = "<group>"; };
 		ED405AF7264DDF070024CDE7 /* GameStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStats.swift; sourceTree = "<group>"; };
+		ED6A0D822650B50D003337B2 /* playoffs1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playoffs1.png; sourceTree = "<group>"; };
 		EDC17F8D2642E10E00A80F32 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		EDC17F952642FCF500A80F32 /* nbalogo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nbalogo.jpeg; sourceTree = "<group>"; };
 		EDC17F962642FD0600A80F32 /* swoosh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = swoosh.mp3; path = ../../../../../Downloads/swoosh.mp3; sourceTree = "<group>"; };
 		EDC17F9E2643156B00A80F32 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		EDDD7FC5263EEA6100D395B8 /* PlayerStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatsViewController.swift; sourceTree = "<group>"; };
 		EDE388C02648495700EB4581 /* PlayerInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfoTableViewCell.swift; sourceTree = "<group>"; };
-		EDE388C42648613800EB4581 /* defaulthead.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = defaulthead.jpg; path = ../../../../../Downloads/defaulthead.jpg; sourceTree = "<group>"; };
 		EDE388C8264861F600EB4581 /* PlayerStatsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatsTableViewCell.swift; sourceTree = "<group>"; };
 		EDE475EA263C128A0096E7B9 /* PlayersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersViewController.swift; sourceTree = "<group>"; };
 		EDE475ED263C12AB0096E7B9 /* PlayerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfo.swift; sourceTree = "<group>"; };
@@ -74,7 +78,6 @@
 		EDFC72552648A637004FF45A /* NextGameTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextGameTableViewCell.swift; sourceTree = "<group>"; };
 		EDFC72582648A64D004FF45A /* PreviousGamesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousGamesTableViewCell.swift; sourceTree = "<group>"; };
 		EDFC725B2648A801004FF45A /* nba-logo-1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "nba-logo-1.jpg"; path = "../../../../../Downloads/nba-logo-1.jpg"; sourceTree = "<group>"; };
-		EDFC72632648E74C004FF45A /* default-headshot-men.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-headshot-men.png"; path = "../../../../../Downloads/default-headshot-men.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED0504E6264F480300CAB039 /* Kingfisher in Frameworks */,
 				EDC17F8E2642E10E00A80F32 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -89,6 +93,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		ED6A0D812650AF25003337B2 /* Table View Cells */ = {
+			isa = PBXGroup;
+			children = (
+				EDE388C8264861F600EB4581 /* PlayerStatsTableViewCell.swift */,
+				EDC17F9E2643156B00A80F32 /* CustomTableViewCell.swift */,
+				EDE388C02648495700EB4581 /* PlayerInfoTableViewCell.swift */,
+				EDFC72522648A626004FF45A /* TeamInfoTableViewCell.swift */,
+				EDFC72552648A637004FF45A /* NextGameTableViewCell.swift */,
+				EDFC72582648A64D004FF45A /* PreviousGamesTableViewCell.swift */,
+				ED2B8643264DFA5600666D4D /* GameTeamInfoTableViewCell.swift */,
+				ED2B8647264E1A4F00666D4D /* GamePlayerTableViewCell.swift */,
+			);
+			path = "Table View Cells";
+			sourceTree = "<group>";
+		};
 		EDC17F882642E03700A80F32 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,9 +127,9 @@
 		EDC17F942642FCF100A80F32 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				EDFC72632648E74C004FF45A /* default-headshot-men.png */,
+				ED6A0D822650B50D003337B2 /* playoffs1.png */,
+				ED0504E0264EFFC200CAB039 /* default-headshot-men.png */,
 				EDFC725B2648A801004FF45A /* nba-logo-1.jpg */,
-				EDE388C42648613800EB4581 /* defaulthead.jpg */,
 				EDC17F952642FCF500A80F32 /* nbalogo.jpeg */,
 			);
 			path = Images;
@@ -138,6 +157,7 @@
 			children = (
 				EDFB95282636E56900A55C12 /* Delegates */,
 				EDFB95272636E55C00A55C12 /* Controllers */,
+				ED6A0D812650AF25003337B2 /* Table View Cells */,
 				EDFB95262636E55000A55C12 /* Data */,
 				EDFB95252636E54700A55C12 /* Views */,
 				EDFB95242636E53C00A55C12 /* Models */,
@@ -186,16 +206,9 @@
 				EDFB952D2636E9E800A55C12 /* InitialTeamViewController.swift */,
 				EDE475EA263C128A0096E7B9 /* PlayersViewController.swift */,
 				EDDD7FC5263EEA6100D395B8 /* PlayerStatsViewController.swift */,
-				EDC17F9E2643156B00A80F32 /* CustomTableViewCell.swift */,
-				EDE388C02648495700EB4581 /* PlayerInfoTableViewCell.swift */,
-				EDE388C8264861F600EB4581 /* PlayerStatsTableViewCell.swift */,
-				EDFC72522648A626004FF45A /* TeamInfoTableViewCell.swift */,
-				EDFC72552648A637004FF45A /* NextGameTableViewCell.swift */,
-				EDFC72582648A64D004FF45A /* PreviousGamesTableViewCell.swift */,
 				ED2B8641264DEDC700666D4D /* GameStatsViewController.swift */,
-				ED2B8643264DFA5600666D4D /* GameTeamInfoTableViewCell.swift */,
 				ED2B8645264E156400666D4D /* StatsTeamTableViewCell.swift */,
-				ED2B8647264E1A4F00666D4D /* GamePlayerTableViewCell.swift */,
+				ED338A03265069FB007495D5 /* PositionFilterViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -225,6 +238,9 @@
 			dependencies = (
 			);
 			name = NBAStatsApp;
+			packageProductDependencies = (
+				ED0504E5264F480300CAB039 /* Kingfisher */,
+			);
 			productName = NBAStatsApp;
 			productReference = EDFB950B2636E45300A55C12 /* NBAStatsApp.app */;
 			productType = "com.apple.product-type.application";
@@ -252,6 +268,9 @@
 				Base,
 			);
 			mainGroup = EDFB95022636E45300A55C12;
+			packageReferences = (
+				ED0504E4264F480300CAB039 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = EDFB950C2636E45300A55C12 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -266,9 +285,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EDE388C52648613800EB4581 /* defaulthead.jpg in Resources */,
+				ED6A0D832650B50D003337B2 /* playoffs1.png in Resources */,
 				EDC17F972642FD0600A80F32 /* swoosh.mp3 in Resources */,
-				EDFC72642648E74C004FF45A /* default-headshot-men.png in Resources */,
+				ED0504E1264EFFC200CAB039 /* default-headshot-men.png in Resources */,
 				EDFC725C2648A801004FF45A /* nba-logo-1.jpg in Resources */,
 				EDFB951B2636E45400A55C12 /* LaunchScreen.storyboard in Resources */,
 				EDFB95182636E45400A55C12 /* Assets.xcassets in Resources */,
@@ -286,6 +305,7 @@
 				EDE388C12648495700EB4581 /* PlayerInfoTableViewCell.swift in Sources */,
 				EDFC72562648A637004FF45A /* NextGameTableViewCell.swift in Sources */,
 				EDE475F1263C2EF90096E7B9 /* PlayerStatsInfo.swift in Sources */,
+				ED338A04265069FB007495D5 /* PositionFilterViewController.swift in Sources */,
 				EDDD7FC6263EEA6100D395B8 /* PlayerStatsViewController.swift in Sources */,
 				EDFB953426370D6700A55C12 /* GameInfo.swift in Sources */,
 				EDFB95132636E45300A55C12 /* ViewController.swift in Sources */,
@@ -507,6 +527,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ED0504E4264F480300CAB039 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		ED0504E5264F480300CAB039 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ED0504E4264F480300CAB039 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EDFB95032636E45300A55C12 /* Project object */;
 }

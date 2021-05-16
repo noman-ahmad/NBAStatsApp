@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class CustomTableViewCell: UITableViewCell {
 
@@ -21,16 +22,33 @@ class CustomTableViewCell: UITableViewCell {
         NameLabel.text = forTeam.full_name
         let imageUrl = "http://i.cdn.turner.com/nba/nba/.element/img/1.0/teamsites/logos/teamlogos_500x500/" + "\((forTeam.abbreviation).lowercased())" + ".png"
         let url = URL(string: imageUrl)
-        teamImage.load2(url: url!, placeholder: nil)
+        teamImage.kf.setImage(with: url)
     }
     
     func configurePlayer(forPlayer: PlayerInfo) {
         NameLabel.text = forPlayer.first_name + " " + forPlayer.last_name
         let playerurl = "https://nba-players.herokuapp.com/players/" + forPlayer.last_name.lowercased() + "/" + forPlayer.first_name.lowercased()
-        if let url = URL(string: playerurl) {
-            teamImage.load(from: playerurl)
-        } else {
-            teamImage.image = #imageLiteral(resourceName: "default-headshot-men")
+        let url = URL(string: playerurl)
+        let processor = DownsamplingImageProcessor(size: teamImage.bounds.size)
+                     |> RoundCornerImageProcessor(cornerRadius: 20)
+        teamImage.kf.indicatorType = .activity
+        teamImage.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "default-headshot-men.png"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ])
+        {
+            result in
+            switch result {
+            case .success(let value):
+                print("Task done for: \(value.source.url?.absoluteString ?? "")")
+            case .failure(let error):
+                print("Job failed: \(error.localizedDescription)")
+            }
         }
     }
     

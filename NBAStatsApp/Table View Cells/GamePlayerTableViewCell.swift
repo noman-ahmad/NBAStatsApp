@@ -31,14 +31,23 @@ class GamePlayerTableViewCell: UITableViewCell {
     
     func configureDefault() {
         playerName.text = "Player"
+        //playerName.font = UIFont.boldSystemFont(ofSize: playerName.font.pointSize)
         minutes.text = "MIN"
+        //minutes.font = UIFont.boldSystemFont(ofSize: minutes.font.pointSize)
         points.text = "PTS"
+       // points.font = UIFont.boldSystemFont(ofSize: points.font.pointSize)
         rebounds.text = "REB"
+        //rebounds.font = UIFont.boldSystemFont(ofSize: rebounds.font.pointSize)
         assists.text = "AST"
+        //assists.font = UIFont.boldSystemFont(ofSize: assists.font.pointSize)
         blocks.text = "BLK"
+        //blocks.font = UIFont.boldSystemFont(ofSize: blocks.font.pointSize)
         steals.text = "STL"
+       // steals.font = UIFont.boldSystemFont(ofSize: steals.font.pointSize)
         ft_pct.text = "FTS"
+       // ft_pct.font = UIFont.boldSystemFont(ofSize: ft_pct.font.pointSize)
         threept.text = "3PT"
+       // threept.font = UIFont.boldSystemFont(ofSize: threept.font.pointSize)
     }
     @IBOutlet weak var threept: UILabel!
     

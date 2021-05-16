@@ -91,13 +91,18 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     var losses: Int = 0
     var players:[PlayerInfo]?
     
+    var allowSelect = false
+    
     var allPlayerStats = [PlayerStats]()
     var teamplayers = [PlayerInfo]()
     
+    var fetched = false
 
     @IBOutlet weak var gamesTableView: UITableView!
    
     var currentTeam:TeamInfo?
+    
+    let year = Calendar.current.component(.year, from: Date()) - 1
     
     
     
@@ -107,13 +112,21 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.navigationItem.title = currentTeam?.abbreviation
         let defaults = UserDefaults.standard
         let colors_on = defaults.bool(forKey: "dark_mode")
-        if colors_on {
+        if colors_on{
             overrideUserInterfaceStyle = .dark
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         } else {
             overrideUserInterfaceStyle = .light
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.navigationBar.barTintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
+
         PlayersButton.title = "See Players"
         PlayersButton.isEnabled = false
+        self.PlayersButton.tintColor = UIColor.systemBlue.withAlphaComponent(0.0)
         
         self.navigationItem.hidesBackButton = true
         
@@ -121,17 +134,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         downloadGameData {
                 // Put your code which should be executed with a delay here
             self.gamesTableView.reloadData()
-//            let start_date = nextGame!.date.index(nextGame!.date.startIndex, offsetBy: 5)
-//            let end_date = nextGame!.date.index(nextGame!.date.startIndex, offsetBy: 9)
-//            let range = start_date...end_date
-//            let formatted_date = String(nextGame!.date[range])
-//            var add_to_label = "Upcoming Game: " + formatted_date
-//            if nextGame?.home_team.id == currentTeam?.id{
-//                add_to_label = add_to_label + " vs. " + (nextGame?.visitor_team.abbreviation)!
-//            } else {
-//                add_to_label = add_to_label + " @ " + (nextGame?.home_team.abbreviation)!
-//                opposing_team = (nextGame?.home_team.abbreviation)!
-//            }
+
             
             self.getPlayerforTeam {
                 print("Got All Players")
@@ -144,7 +147,12 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             let seconds = 5.5
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                 // Put your code which should be executed with a delay here
-                self.PlayersButton.isEnabled = true
+                //self.PlayersButton.isEnabled = true
+                UIView.animate(withDuration: 4) {
+                    self.PlayersButton.tintColor = UIColor.systemBlue.withAlphaComponent(1.0)
+                    self.PlayersButton.isEnabled = true
+                    self.allowSelect = true
+                }
             }
             
             let backseconds = 40.0
@@ -165,7 +173,21 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // MARK: - Table View Functions
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return games.count + 2
+        if !fetched {
+            return 0
+        } else {
+            return games.count + 2
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if (indexPath.row == 0) || (indexPath.row == 1){
+            return nil
+        } else if self.allowSelect{
+            return indexPath
+        } else {
+            return nil
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -173,11 +195,13 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "teamInfo", for: indexPath) as! TeamInfoTableViewCell
             cell.configure(forTeam: self.currentTeam!, forWins: self.wins, forLosses: self.losses)
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
         } else if indexPath.row == 1{
             let cell = tableView.dequeueReusableCell(withIdentifier: "nextGame", for: indexPath) as! NextGameTableViewCell
             if nextGame != nil {
                 cell.configureNextGame(forGame: nextGame!)
+                cell.selectionStyle = UITableViewCell.SelectionStyle.none
             }
             return cell
         } else{
@@ -185,52 +209,12 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.configurePrevGame(forGame: games[indexPath.row-2], forTeam: currentTeam!)
             return cell
         }
-        
-//        let defaults = UserDefaults.standard
-//        let color_on = defaults.bool(forKey: "color")
-//        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-//        let current_game = games[indexPath.row]
-//        let month_day = current_game.date
-//        let start_date = month_day.index(month_day.startIndex, offsetBy: 5)
-//        let end_date = month_day.index(month_day.startIndex, offsetBy: 9)
-//        let range = start_date...end_date
-//        let formatted_date = String(month_day[range])
-//        var add_to_label = ""
-//        var color = UIColor.black
-//        // if it is the home team
-//        if current_game.home_team.id == currentTeam!.id {
-//            if current_game.home_team_score > current_game.visitor_team_score {
-//                add_to_label = formatted_date + ": W vs. " + current_game.visitor_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
-//                if (color_on == true) {
-//                    color = UIColor.systemGreen
-//                }
-//            } else {
-//                add_to_label = formatted_date + ": L vs. " + current_game.visitor_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
-//                if (color_on == true) {
-//                    color = UIColor.systemRed
-//                }
-//            }
-//        } else {
-//            if current_game.home_team_score > current_game.visitor_team_score {
-//                add_to_label = formatted_date + ": L @ " + current_game.home_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
-//                if (color_on == true) {
-//                    color = UIColor.systemRed
-//                }
-//            } else {
-//                add_to_label = formatted_date + ": W @ " + current_game.home_team.abbreviation + ": " + String(current_game.visitor_team_score) + "-" +  String(current_game.home_team_score) + "  "
-//                if (color_on == true) {
-//                    color = UIColor.systemGreen
-//                }
-//            }
-//        }
-//        cell.textLabel?.text = add_to_label
-//        cell.textLabel?.textColor = color
-//        cell.textLabel?.textAlignment = .center
-//        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showGameStats", sender: self)
+        if (indexPath.row != 0) || (indexPath.row != 1){
+            performSegue(withIdentifier: "showGameStats", sender: self)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -260,7 +244,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // MARK: - API Functionality
     func downloadGameData(completed: @escaping () -> ()) {
-        let base_url = "https://www.balldontlie.io/api/v1/games?seasons[]=2020&team_ids[]=" + String((currentTeam?.id)!) + "&per_page=100"
+        let base_url = "https://www.balldontlie.io/api/v1/games?seasons[]=" + String(self.year) + "&team_ids[]=" + String((currentTeam?.id)!) + "&per_page=100"
         print(base_url)
         
         let url = URL(string: base_url)
@@ -305,6 +289,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                     }
                     self.games.removeAll(where: {$0.home_team_score == 0})
                     DispatchQueue.main.async {
+                        fetched = true
                         completed()
                     }
                 } catch {
@@ -366,7 +351,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func downloadAllSeasonStatsData(completed: @escaping () -> ()) {
         for i in 0...20  {
-            downloadStatsData(season: 2020 - i) {
+            downloadStatsData(season: self.year - i) {
                // print("Got Data For Season: ")
                 self.allPlayerStats.sort(by: {$0.season > $1.season})
             }

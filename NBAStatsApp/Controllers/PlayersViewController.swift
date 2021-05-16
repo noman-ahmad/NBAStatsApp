@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class PlayersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PlayersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FilterPositionDelegate{
     var audio_player = AVAudioPlayer()
     // MARK: - Outlets & Variables
     
@@ -26,32 +26,39 @@ class PlayersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var playerToSend = [PlayerStats]()
     
+    var filtered = false
+    
+    var filters = [Bool]()
+    
+    var filteredPlayers = [PlayerInfo]()
+    
     
     // MARK: - On Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         let defaults = UserDefaults.standard
         let colors_on = defaults.bool(forKey: "dark_mode")
-        if colors_on {
+        if colors_on{
             overrideUserInterfaceStyle = .dark
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         } else {
             overrideUserInterfaceStyle = .light
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.navigationBar.barTintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
+
         self.navigationItem.title = currentTeam?.full_name
         let imageUrl = ("http://i.cdn.turner.com/nba/nba/.element/img/1.0/teamsites/logos/teamlogos_500x500/" + (currentTeam?.abbreviation.lowercased())! + ".png")
         let url = URL(string: imageUrl)
         teamImageView.downloaded(from: imageUrl)
         print(currentTeam?.abbreviation as Any)
-//        self.getPlayerforTeam {
-//            print("Got All Players")
-//            self.playersTableView.delegate = self
-//            self.playersTableView.dataSource = self
-//            print(self.players)
-//        }
-//        self.downloadAllSeasonStatsData() {
-//        }
 
-            // Put your code which should be executed with a delay here
+        // Put your code which should be executed with a delay here
         self.playersTableView.reloadData()
         // Do any additional setup after loading the view.
         playersTableView.delegate = self
@@ -60,13 +67,23 @@ class PlayersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return players.count
+        if filtered {
+            return filteredPlayers.count
+        } else {
+            return players.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = playersTableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
-        cell.configurePlayer(forPlayer: players[indexPath.row])
-        return cell
+        if filtered {
+            let cell = playersTableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
+            cell.configurePlayer(forPlayer: filteredPlayers[indexPath.row])
+            return cell
+        } else {
+            let cell = playersTableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
+            cell.configurePlayer(forPlayer: players[indexPath.row])
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -75,9 +92,19 @@ class PlayersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? PositionFilterViewController {
+            destination.delegate = self
+            self.filteredPlayers.removeAll()
+        }
+        
         if let destination = segue.destination as? PlayerStatsViewController {
-            destination.currentPlayer = players[(playersTableView.indexPathForSelectedRow?.row)!]
-            destination.currentPlayerStats = allPlayerStats
+            if filtered {
+                destination.currentPlayer = filteredPlayers[(playersTableView.indexPathForSelectedRow?.row)!]
+                destination.currentPlayerStats = allPlayerStats
+            } else {
+                destination.currentPlayer = players[(playersTableView.indexPathForSelectedRow?.row)!]
+                destination.currentPlayerStats = allPlayerStats
+            }
         }
         let defaults = UserDefaults.standard
         let sound_on = defaults.bool(forKey: "sounds")
@@ -93,109 +120,66 @@ class PlayersViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     }
     
-//    func getPlayerforTeam(completed: @escaping () -> ()) {
-//        for i in 0...allPlayers!.count-1 {
-//            let currentPlayer = allPlayers![i]
-//            if currentPlayer.team.id == self.currentTeam!.id {
-//                let roster = TeamsPlayers[self.currentTeam!.full_name]
-//                for j in 0...roster!.count-1{
-//                    if roster![j] == currentPlayer.id{
-//                        players.append(currentPlayer)
-//                    }
-//                }
-//            }
-//        }
-//        players.sort(by: {$0.last_name < $1.last_name})
-//        DispatchQueue.main.async {
-//            completed()
-//        }
-//    }
-//
-//
-//
-//    // MARK: - API Functionality
-//    func downloadStatsData(season: Int, completed: @escaping () -> ()) {
-//       var baseurl = "https://www.balldontlie.io/api/v1/season_averages?season=" + String(season)
-//        for i in 0...players.count-1 {
-//            baseurl = baseurl + "&player_ids[]=" + String(players[i].id)
-//        }
-//        let url = URL(string: baseurl)
-//        URLSession.shared.dataTask(with: url!) {
-//            (data, response, error) in
-//            // if data is available
-//            if error == nil {
-//                do {
-//                    let result = try JSONDecoder().decode(StatsData.self, from: data!)
-//                    for data in result.data {
-//                        self.allPlayerStats.append(data)
-//                        //print(data)
-//                    }
-//                    DispatchQueue.main.async {
-//                        completed()
-//                    }
-//                } catch {
-//                    print("API CALL Limit")
-//                    //debugPrint(error)
-//                }
-//            }
-//        }.resume()
-//    }
-//
-//    func downloadAllSeasonStatsData(completed: @escaping () -> ()) {
-//        for i in 0...20  {
-//            downloadStatsData(season: 2020 - i) {
-//                print("Got Data For Season: ")
-//                self.allPlayerStats.sort(by: {$0.season > $1.season})
-//            }
-//        }
-//        DispatchQueue.main.async {
-//            completed()
-//        }
-//    }
-//
-//
-    
-    
-// MARK: - DEBUG CODE
-//    // MARK: - API Functionality
-//    func downloadPlayerData(page: Int, completed: @escaping () -> ()) {
-//        let url = URL(string: ("https://www.balldontlie.io/api/v1/players?per_page=100&page=") + String(page))
-//
-//        URLSession.shared.dataTask(with: url!) {
-//            (data, response, error) in
-//
-//            if error == nil {
-//                do {
-//                    let result = try JSONDecoder().decode(PlayerData.self, from: data!)
-//                    for data in result.data {
-//                        if data.team.id == self.currentTeam!.id {
-//                            let roster = TeamsPlayers[self.currentTeam!.full_name]
-//                            for i in 0...roster!.count-1{
-//                                if roster![i] == data.id{
-//                                    self.players.append(data)
-//                                    print(self.players)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    DispatchQueue.main.async{
-//                        completed()
-//                    }
-//                } catch {
-//                    debugPrint(error)
-//                }
-//            }
-//        }.resume()
-//    }
-//
-//    func downloadAllPlayerData(){
-//        for i in 1...35 {
-//            downloadPlayerData(page: i) {
-//                print("Successfully Download Page" + String(i))
-//                self.playersTableView.reloadData()
-//                }
-//        }
-//    }
-    
-
+    func addFilter(positions: [Bool]) {
+        self.filters = positions
+        print("I'm Here")
+        for i in 0...self.players.count-1 {
+            if positions[0] == true {
+                filtered = false
+//                filteredPlayers = players
+            } else {
+                if positions[1] == true && self.players[i].position == "G"{
+                    self.filteredPlayers.append(self.players[i])
+                }
+                if positions[2] == true && self.players[i].position == "G-F"{
+                    self.filteredPlayers.append(self.players[i])
+                }
+                if positions[3] == true && self.players[i].position == "F"{
+                    self.filteredPlayers.append(self.players[i])
+                }
+                if positions[4] == true && self.players[i].position == "F-C"{
+                    self.filteredPlayers.append(self.players[i])
+                }
+                if positions[5] == true && self.players[i].position == "C"{
+                    self.filteredPlayers.append(self.players[i])
+                }
+                self.filtered = true
+            }
+            if (positions[0] == false) && (positions[1] == false) && (positions[2] == false) && (positions[3] == false) && (positions[4] == false) && (positions[5] == false) {
+                self.filtered = false
+            }
+            self.playersTableView.reloadData()
+        }
+    }
 }
+
+//extension PlayersViewController: FilterPositionDelegate {
+//    func addFilter(positions: [Bool]) {
+//        self.dismiss(animated:true) {
+//            self.filters = positions
+//            for i in 0...self.players.count {
+//                if positions[0] == true {
+//                    return
+//                } else {
+//                    if positions[1] == true && self.players[i].position == "G"{
+//                        self.filteredPlayers.append(self.players[i])
+//                    }
+//                    if positions[2] == true && self.players[i].position == "G-F"{
+//                        self.filteredPlayers.append(self.players[i])
+//                    }
+//                    if positions[3] == true && self.players[i].position == "F"{
+//                        self.filteredPlayers.append(self.players[i])
+//                    }
+//                    if positions[4] == true && self.players[i].position == "F-C"{
+//                        self.filteredPlayers.append(self.players[i])
+//                    }
+//                    if positions[5] == true && self.players[i].position == "C"{
+//                        self.filteredPlayers.append(self.players[i])
+//                    }
+//                    self.filtered = true
+//                    self.playersTableView.reloadData()
+//                }
+//            }
+//        }
+//    }
+//}

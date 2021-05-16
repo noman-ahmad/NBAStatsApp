@@ -19,11 +19,18 @@ class InitialTeamViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         let defaults = UserDefaults.standard
         let colors_on = defaults.bool(forKey: "dark_mode")
-        if colors_on {
+        if colors_on{
             overrideUserInterfaceStyle = .dark
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         } else {
             overrideUserInterfaceStyle = .light
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.navigationBar.barTintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
+
         self.navigationItem.title = "NBA"
         downloadTeamData {
             self.teamTableView.reloadData()

@@ -15,6 +15,7 @@ class StatsTeamTableViewCell: UITableViewCell {
     }
     @IBOutlet weak var teamName: UILabel!
     
+    @IBOutlet weak var teamImage: UIImageView!
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
@@ -22,7 +23,10 @@ class StatsTeamTableViewCell: UITableViewCell {
     }
     
     func configure(forTeam: TeamInfo){
-        teamName.text = forTeam.full_name
+        teamName.text = forTeam.name
+        let teamurl = "http://i.cdn.turner.com/nba/nba/.element/img/1.0/teamsites/logos/teamlogos_500x500/" + "\((forTeam.abbreviation).lowercased())" + ".png"
+        let url = URL(string: teamurl)
+        teamImage.load2(url: url!, placeholder: nil)
     }
     
     

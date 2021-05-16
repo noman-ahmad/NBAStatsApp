@@ -25,6 +25,22 @@ class GameStatsViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = (self.currentGame?.visitor_team!.abbreviation)! + " vs. " + (self.currentGame?.home_team!.abbreviation)!
+        
+        let defaults = UserDefaults.standard
+        let colors_on = defaults.bool(forKey: "dark_mode")
+        if colors_on{
+            overrideUserInterfaceStyle = .dark
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        } else {
+            overrideUserInterfaceStyle = .light
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.navigationBar.barTintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        }
+        
         downloadGameStatsData {
             print("Got Data")
             
@@ -48,36 +64,39 @@ class GameStatsViewController: UIViewController, UITableViewDelegate, UITableVie
         if indexPath.row == 0 {
             let cell = statsTableView.dequeueReusableCell(withIdentifier: "gameDetails", for: indexPath) as! GameTeamInfoTableViewCell
             cell.configureTeamGameInfo(forGame: currentGame!)
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
 
         } else if indexPath.row == 1 {
             let cell = statsTableView.dequeueReusableCell(withIdentifier: "teamDetails", for: indexPath) as! StatsTeamTableViewCell
             cell.configure(forTeam: (currentGame?.visitor_team!)!)
             //cell.configurePlayer(forPlayer: players[indexPath.row])
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
         } else if indexPath.row == 2 {
             let cell = statsTableView.dequeueReusableCell(withIdentifier: "statDetails", for: indexPath) as! GamePlayerTableViewCell
-            cell.configureDefault() 
+            cell.configureDefault()
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
         } else if (indexPath.row >= 3) && (indexPath.row <= 3 + self.awayStats.count - 1) && (self.isFetched){
             let cell = statsTableView.dequeueReusableCell(withIdentifier: "statDetails", for: indexPath) as! GamePlayerTableViewCell
             cell.configurePlayerStat(forPlayerStat: self.awayStats[indexPath.row-3])
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
         } else if (indexPath.row == 3 + self.awayStats.count) && self.isFetched{
             let cell = statsTableView.dequeueReusableCell(withIdentifier: "teamDetails", for: indexPath) as! StatsTeamTableViewCell
             cell.configure(forTeam: (currentGame?.home_team!)!)
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
         } else if (indexPath.row == 4 + self.awayStats.count) && self.isFetched{
             let cell = statsTableView.dequeueReusableCell(withIdentifier: "statDetails", for: indexPath) as! GamePlayerTableViewCell
             cell.configureDefault()
-            return cell
-        } else if self.isFetched{
-            let cell = statsTableView.dequeueReusableCell(withIdentifier: "statDetails", for: indexPath) as! GamePlayerTableViewCell
-            cell.configurePlayerStat(forPlayerStat: self.homeStats[indexPath.row - (5 + awayStats.count)])
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
         } else {
-            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = "N"
+            let cell = statsTableView.dequeueReusableCell(withIdentifier: "statDetails", for: indexPath) as! GamePlayerTableViewCell
+            cell.configurePlayerStat(forPlayerStat: self.homeStats[indexPath.row - (5 + awayStats.count)])
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
         }
     }

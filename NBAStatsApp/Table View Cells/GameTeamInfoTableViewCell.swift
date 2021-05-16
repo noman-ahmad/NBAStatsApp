@@ -32,6 +32,7 @@ class GameTeamInfoTableViewCell: UITableViewCell {
     @IBOutlet weak var awayRecord: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var outcomeLabel: UILabel!
+    @IBOutlet weak var seasonLogo: UIImageView!
     
     func configureTeamGameInfo(forGame: GameInfo) {
         homeTeamName.text = forGame.home_team!.abbreviation
@@ -66,6 +67,12 @@ class GameTeamInfoTableViewCell: UITableViewCell {
         homeRecord.textColor = .systemGray
         awayRecord.text = forGame.home_team?.division
         awayRecord.textColor = .systemGray
+        
+        if forGame.postseason == true {
+            seasonLogo.image = #imageLiteral(resourceName: "playoffs1")
+        } else {
+            seasonLogo.image = #imageLiteral(resourceName: "nba-logo-1")
+        }
         
     }
 

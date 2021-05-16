@@ -25,11 +25,18 @@ class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         let defaults = UserDefaults.standard
         let colors_on = defaults.bool(forKey: "dark_mode")
-        if colors_on {
+        if colors_on{
             overrideUserInterfaceStyle = .dark
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         } else {
             overrideUserInterfaceStyle = .light
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.navigationBar.barTintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
+
         self.navigationItem.title = (currentPlayer!.first_name + " " + currentPlayer!.last_name)
             // Put your code which should be executed with a delay here
         self.getCurrentData {
@@ -41,6 +48,9 @@ class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableV
         // Do any additional setup after loading the view.
     }
     
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return nil
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return playerStats.count + 2
@@ -75,42 +85,4 @@ class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableV
             completed()
         }
     }
-    
-    
-    
-// MARK: - DEBUG CODE
-    
-//    // MARK: - API Functionality
-//    func downloadStatsData(season: Int, completed: @escaping () -> ()) {
-//        let url = URL(string: ("https://www.balldontlie.io/api/v1/season_averages?player_ids[]=" + String(currentPlayer!.id) + "&season=" + String(season)))
-//        URLSession.shared.dataTask(with: url!) {
-//            (data, response, error) in
-//
-//            if error == nil {
-//                do {
-//                    let result = try JSONDecoder().decode(StatsData.self, from: data!)
-//                    for data in result.data {
-//                        self.playerStats.append(data)
-//                        print(data)
-//                    }
-//                    DispatchQueue.main.async {
-//                        completed()
-//                    }
-//                } catch {
-//                    debugPrint(error)
-//                }
-//            }
-//        }.resume()
-//    }
-//
-//    func downloadAllSeasonStatsData() {
-//        for i in 0...22  {
-//            downloadStatsData(season: currentSeason - i) {
-//                print("Got Data For Season: ")
-//                self.playerStats.sort(by: {$0.season > $1.season})
-//                self.careerTableView.reloadData()
-//            }
-//        }
-//    }
-    
 }

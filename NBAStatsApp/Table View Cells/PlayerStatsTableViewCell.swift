@@ -23,6 +23,7 @@ class PlayerStatsTableViewCell: UITableViewCell {
     @IBOutlet weak var ft_pct: UILabel!
     @IBOutlet weak var threepct: UILabel!
     @IBOutlet weak var fgpct: UILabel!
+    @IBOutlet weak var gamesPlayed: UILabel!
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
@@ -31,14 +32,15 @@ class PlayerStatsTableViewCell: UITableViewCell {
     
     func configureInitial() {
         season.text = "Season"
-        pts.text = "Pnts"
-        ast.text = "Asts"
-        rebs.text = "Rebs"
-        stls.text = "Stls"
-        blks.text = "Blks"
-        ft_pct.text = "Ft"
-        threepct.text = "3Fg"
-        fgpct.text = "Fg"
+        pts.text = "PPG"
+        ast.text = "APG"
+        rebs.text = "RPG"
+        stls.text = "SPG"
+        blks.text = "BPG"
+        ft_pct.text = "FT%"
+        threepct.text = "3P%"
+        fgpct.text = "FG%"
+        gamesPlayed.text = "GP"
     }
     
     func configureStats(forStats: PlayerStats) {
@@ -51,6 +53,7 @@ class PlayerStatsTableViewCell: UITableViewCell {
         fgpct.text = String(Int(round(forStats.fg_pct * 100)))
         threepct.text = String(Int(round(forStats.fg3_pct * 100)))
         ft_pct.text = String(Int(round(forStats.ft_pct * 100)))
+        gamesPlayed.text = String(forStats.games_played)
     }
 
 }

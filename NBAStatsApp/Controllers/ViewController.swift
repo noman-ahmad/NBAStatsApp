@@ -14,26 +14,46 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         downloadAllPlayerData()
+        self.InitialButton.isEnabled = false
+        self.InitialButton.tintColor = UIColor.systemBlue.withAlphaComponent(0.0)
+        //self.ColorSwitch.setOn(colors_on, animated: false)
+        //self.SoundSwitch.setOn(sound_on, animated: false)
         let defaults = UserDefaults.standard
         let colors_on = defaults.bool(forKey: "dark_mode")
         let sound_on = defaults.bool(forKey: "sounds")
-        self.InitialButton.isEnabled = false
-        self.ColorSwitch.setOn(colors_on, animated: false)
-        self.SoundSwitch.setOn(sound_on, animated: false)
-        if colors_on{
-            overrideUserInterfaceStyle = .dark
+        if sound_on {
+            self.SoundSwitch.isOn = true
         } else {
+            self.SoundSwitch.isOn = false
+        }
+        if colors_on{
+            self.ColorSwitch.isOn = true
+            overrideUserInterfaceStyle = .dark
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        } else {
+            self.ColorSwitch.isOn = false
             overrideUserInterfaceStyle = .light
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.navigationBar.barTintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
         let seconds = 2.0
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
             // Put your code which should be executed with a delay here
+            UIView.animate(withDuration: 4) {
+                self.InitialButton.tintColor = UIColor.systemBlue.withAlphaComponent(1.0)
+                self.InitialButton.isEnabled = true
+            }
             self.InitialButton.isEnabled = true
         }
         
     }
     @IBOutlet weak var SoundSwitch: UISwitch!
     @IBOutlet weak var ColorSwitch: UISwitch!
+
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? InitialTeamViewController {
@@ -74,24 +94,24 @@ class ViewController: UIViewController {
                                 style: .default) { (action) in
             // Respond to user selection of the action.
            }
-           
+
            // Create and configure the alert controller.
            let alert = UIAlertController(title: "Dark Mode",
                  message: "Dark Mode has changed",
                  preferredStyle: .alert)
            alert.addAction(defaultAction)
-                
+
            self.present(alert, animated: true) {
               // The alert was presented
            }
-        
+
         if self.ColorSwitch.isOn {
             self.overrideUserInterfaceStyle = .dark
         } else {
             self.overrideUserInterfaceStyle = .light
         }
     }
-    
+
     @IBAction func toggleSound(_ sender: Any) {
         if self.SoundSwitch.isOn {
             let defaults = UserDefaults.standard
