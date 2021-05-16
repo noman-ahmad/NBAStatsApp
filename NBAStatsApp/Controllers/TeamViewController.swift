@@ -198,12 +198,18 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
         } else if indexPath.row == 1{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "nextGame", for: indexPath) as! NextGameTableViewCell
             if nextGame != nil {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "nextGame", for: indexPath) as! NextGameTableViewCell
                 cell.configureNextGame(forGame: nextGame!)
                 cell.selectionStyle = UITableViewCell.SelectionStyle.none
+                return cell
+            } else {
+                let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+                cell.textLabel?.text = "Next Game TBA"
+                cell.textLabel?.textAlignment = .center
+                cell.selectionStyle = UITableViewCell.SelectionStyle.none
+                return cell
             }
-            return cell
         } else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "previousGame", for: indexPath) as! PreviousGamesTableViewCell
             cell.configurePrevGame(forGame: games[indexPath.row-2], forTeam: currentTeam!)
@@ -257,13 +263,13 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let result = try JSONDecoder().decode(GameData.self, from: data!)
                     for data in result.data {
                         self.games.append(data)
-                        if (data.home_team!.id == currentTeam!.id) && (data.home_team_score! != 0) && (data.period! >= 4){
-                            if data.home_team_score! > data.visitor_team_score! {
+                        if (data.home_team!.id == currentTeam!.id) && (data.home_team_score! != 0) && (data.period! >= 4)  && (data.postseason == false){
+                            if data.home_team_score! > data.visitor_team_score!{
                                 self.wins = self.wins + 1
-                            } else {
+                            } else{
                                 self.losses = self.losses + 1
                             }
-                        } else if (data.home_team!.id != currentTeam!.id) && (data.home_team_score != 0) && (data.period! >= 4) {
+                        } else if (data.home_team!.id != currentTeam!.id) && (data.home_team_score != 0) && (data.period! >= 4)  && (data.postseason == false){
                             if data.visitor_team_score! > data.home_team_score! {
                                 self.wins = self.wins + 1
                             } else{
@@ -275,7 +281,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                     self.games.sort(by: {$0.date! > $1.date!})
                     //print(self.games[0])
                     
-                    for i in 0...self.games.count {
+                    for i in 0...self.games.count-1 {
                         if (self.games[i].home_team_score == 0) && (self.games[i+1].home_team_score != 0) {
                             nextGame = self.games[i]
                             print("Got Next Game")
