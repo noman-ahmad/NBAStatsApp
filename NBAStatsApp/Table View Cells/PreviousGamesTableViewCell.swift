@@ -10,6 +10,7 @@ import UIKit
 class PreviousGamesTableViewCell: UITableViewCell {
 
     @IBOutlet weak var awayImage: UIImageView!
+    @IBOutlet weak var playoffsImage: UIImageView!
     
     @IBOutlet weak var homeScore: UILabel!
     @IBOutlet weak var awayScore: UILabel!
@@ -73,6 +74,10 @@ class PreviousGamesTableViewCell: UITableViewCell {
         let newString = formatted_date.replacingOccurrences(of: "-", with: "/", options: .literal, range: nil)
         dateLabel.text = newString
         
+        if forGame.postseason == true {
+            playoffsImage.image = #imageLiteral(resourceName: "4741__nba_playoffs-primary_on_dark-2018")
+            //playoffsImage.backgroundColor = .black
+        } 
     }
 
 }

@@ -27,18 +27,20 @@ class CustomTableViewCell: UITableViewCell {
     
     func configurePlayer(forPlayer: PlayerInfo) {
         NameLabel.text = forPlayer.first_name + " " + forPlayer.last_name
-        let playerurl = "https://nba-players.herokuapp.com/players/" + forPlayer.last_name.lowercased() + "/" + forPlayer.first_name.lowercased()
-        let url = URL(string: playerurl)
+        var playerurl = forPlayer.imageUrl
+        if playerurl == nil {
+            playerurl = ""
+        }
+        let url = URL(string: playerurl!)
+        print(url)
         let processor = DownsamplingImageProcessor(size: teamImage.bounds.size)
-                     |> RoundCornerImageProcessor(cornerRadius: 20)
-        teamImage.kf.indicatorType = .activity
+        //teamImage.kf.indicatorType = .activity
         teamImage.kf.setImage(
             with: url,
             placeholder: UIImage(named: "default-headshot-men.png"),
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
                 .cacheOriginalImage
             ])
         {

@@ -13,6 +13,7 @@ class NextGameTableViewCell: UITableViewCell {
     @IBOutlet weak var homeName: UILabel!
     @IBOutlet weak var date: UILabel!
     
+    @IBOutlet weak var playoffsImage: UIImageView!
     @IBOutlet weak var awayName: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -55,8 +56,12 @@ class NextGameTableViewCell: UITableViewCell {
                 let formatted_date = String(forGame.date![range])
             let newString = formatted_date.replacingOccurrences(of: "-", with: "/", options: .literal, range: nil)
             
-            date.text = "Upcoming Game: " + newString
+            date.text = newString
         }
+        if forGame.postseason == true {
+            playoffsImage.image = #imageLiteral(resourceName: "4741__nba_playoffs-primary_on_dark-2018")
+            //playoffsImage.backgroundColor = .black
+        } 
     }
 
 }

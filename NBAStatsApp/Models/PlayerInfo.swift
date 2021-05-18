@@ -14,6 +14,7 @@ struct PlayerData: Decodable{
 
 struct PlayerInfo: Decodable {
     let id: Int
+    //let imageId: Int?
     let first_name: String
     let last_name: String
     let position: String?
@@ -21,6 +22,7 @@ struct PlayerInfo: Decodable {
     let height_inches: Int?
     let weight_pounds: Int?
     let team: TeamInfo?
+    var imageUrl: String?
 }
 
 

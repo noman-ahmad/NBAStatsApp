@@ -16,6 +16,7 @@
 		ED2B8648264E1A4F00666D4D /* GamePlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B8647264E1A4F00666D4D /* GamePlayerTableViewCell.swift */; };
 		ED338A04265069FB007495D5 /* PositionFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED338A03265069FB007495D5 /* PositionFilterViewController.swift */; };
 		ED405AF8264DDF070024CDE7 /* GameStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED405AF7264DDF070024CDE7 /* GameStats.swift */; };
+		ED617801265315EB0016F968 /* players.json in Resources */ = {isa = PBXBuildFile; fileRef = ED617800265315EB0016F968 /* players.json */; };
 		ED6A0D832650B50D003337B2 /* playoffs1.png in Resources */ = {isa = PBXBuildFile; fileRef = ED6A0D822650B50D003337B2 /* playoffs1.png */; };
 		EDC17F8E2642E10E00A80F32 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDC17F8D2642E10E00A80F32 /* AVFoundation.framework */; };
 		EDC17F972642FD0600A80F32 /* swoosh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = EDC17F962642FD0600A80F32 /* swoosh.mp3 */; };
@@ -52,6 +53,7 @@
 		ED2B8647264E1A4F00666D4D /* GamePlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlayerTableViewCell.swift; sourceTree = "<group>"; };
 		ED338A03265069FB007495D5 /* PositionFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionFilterViewController.swift; sourceTree = "<group>"; };
 		ED405AF7264DDF070024CDE7 /* GameStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStats.swift; sourceTree = "<group>"; };
+		ED617800265315EB0016F968 /* players.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = players.json; sourceTree = "<group>"; };
 		ED6A0D822650B50D003337B2 /* playoffs1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playoffs1.png; sourceTree = "<group>"; };
 		EDC17F8D2642E10E00A80F32 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		EDC17F952642FCF500A80F32 /* nbalogo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nbalogo.jpeg; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				EDC17F942642FCF100A80F32 /* Images */,
 				EDFB95172636E45400A55C12 /* Assets.xcassets */,
 				EDE475F7263C3B870096E7B9 /* TeamsAndPlayers.swift */,
+				ED617800265315EB0016F968 /* players.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				ED0504E1264EFFC200CAB039 /* default-headshot-men.png in Resources */,
 				EDFC725C2648A801004FF45A /* nba-logo-1.jpg in Resources */,
 				EDFB951B2636E45400A55C12 /* LaunchScreen.storyboard in Resources */,
+				ED617801265315EB0016F968 /* players.json in Resources */,
 				EDFB95182636E45400A55C12 /* Assets.xcassets in Resources */,
 				EDFB95162636E45300A55C12 /* Main.storyboard in Resources */,
 				ED00EF522650DBED00E006A8 /* ballicon.jpg in Resources */,

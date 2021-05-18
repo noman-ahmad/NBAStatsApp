@@ -69,7 +69,8 @@ class GameTeamInfoTableViewCell: UITableViewCell {
         awayRecord.textColor = .systemGray
         
         if forGame.postseason == true {
-            seasonLogo.image = #imageLiteral(resourceName: "playoffs1")
+            seasonLogo.image = #imageLiteral(resourceName: "4741__nba_playoffs-primary_on_dark-2018")
+            //seasonLogo.backgroundColor = .black
         } else {
             seasonLogo.image = #imageLiteral(resourceName: "nba-logo-1")
         }

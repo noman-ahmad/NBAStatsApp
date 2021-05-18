@@ -13,13 +13,10 @@ class GameStatsViewController: UIViewController, UITableViewDelegate, UITableVie
     var currentGame : GameInfo?
     var players : [PlayerInfo]?
     var allGameStats = [GameStats]()
-    
     var home_indexes = [Int]()
     var away_index = [Int]()
-    
     var homeStats = [GameStats]()
     var awayStats = [GameStats]()
-    
     var isFetched = false
     
     override func viewDidLoad() {
@@ -124,8 +121,6 @@ class GameStatsViewController: UIViewController, UITableViewDelegate, UITableVie
                         }
                         self.allGameStats.append(data)
                     }
-                    //self.homeStats.removeAll(where: {$0.min == "" || $0.min == "0:00"})
-                    //self.awayStats.removeAll(where: {$0.min == "" || $0.min == "0:00"})
                     self.homeStats.sort(by: {!($0 < $1)})
                     self.awayStats.sort(by: {!($0 < $1)})
                     self.isFetched = true

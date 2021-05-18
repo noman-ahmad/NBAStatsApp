@@ -66,24 +66,22 @@ class GamePlayerTableViewCell: UITableViewCell {
             ft_pct.text  = ""
             threept.text = ""
         } else {
-            let start_min = forPlayerStat.min.index(forPlayerStat.min.startIndex, offsetBy: 0)
-            var end_min = forPlayerStat.min.index(forPlayerStat.min.startIndex, offsetBy: 1)
-            if forPlayerStat.min[end_min] == ":" {
-                end_min = forPlayerStat.min.index(forPlayerStat.min.startIndex, offsetBy: 0)
+            let start_min = forPlayerStat.min!.index(forPlayerStat.min!.startIndex, offsetBy: 0)
+            var end_min = forPlayerStat.min!.index(forPlayerStat.min!.startIndex, offsetBy: 1)
+            if forPlayerStat.min![end_min] == ":" {
+                end_min = forPlayerStat.min!.index(forPlayerStat.min!.startIndex, offsetBy: 0)
             }
             let range = start_min...end_min
-            formatted_min = String(forPlayerStat.min[range])
+            formatted_min = String(forPlayerStat.min![range])
             minutes.text = formatted_min
-            points.text = String(forPlayerStat.pts)
-            assists.text = String(forPlayerStat.ast)
-            rebounds.text = String(forPlayerStat.reb)
-            steals.text = String(forPlayerStat.stl)
-            blocks.text = String(forPlayerStat.blk)
-            ft_pct.text  = String(forPlayerStat.ftm) + "/" + String(forPlayerStat.fta)
-            threept.text = String(forPlayerStat.fg3m) + "/" + String(forPlayerStat.fg3a)
+            points.text = String(forPlayerStat.pts!)
+            assists.text = String(forPlayerStat.ast!)
+            rebounds.text = String(forPlayerStat.reb!)
+            steals.text = String(forPlayerStat.stl!)
+            blocks.text = String(forPlayerStat.blk!)
+            ft_pct.text  = String(forPlayerStat.ftm!) + "/" + String(forPlayerStat.fta!)
+            threept.text = String(forPlayerStat.fg3m!) + "/" + String(forPlayerStat.fg3a!)
         }
     }
-    
-    
 
 }

@@ -14,10 +14,11 @@ class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableV
     var has_data = true
     
     var currentPlayerStats: [PlayerStats]?
-    
     var currentPlayer:PlayerInfo?
     let currentSeason = 2020
     var playerStats = [PlayerStats]()
+    
+    var careerAverage : PlayerStats?
     
     override func viewDidLoad() {
         self.statsTableView.delegate = self
@@ -42,6 +43,8 @@ class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableV
         self.getCurrentData {
             print("Got Player Data")
             self.statsTableView.reloadData()
+            
+            
         }
         
         
@@ -53,7 +56,7 @@ class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return playerStats.count + 2
+        return playerStats.count + 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,16 +64,20 @@ class PlayerStatsViewController: UIViewController, UITableViewDelegate, UITableV
         let color_on = defaults.bool(forKey: "color")
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "playerInfo", for: indexPath) as! PlayerInfoTableViewCell
-            cell.configurePlayerInfo(forPlayer: currentPlayer!)
+            cell.configurePlayerInfo(forPlayer: currentPlayer!, forStat: playerStats[0])
             return cell
         }
         if indexPath.row == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "playerStats", for: indexPath) as! PlayerStatsTableViewCell
             cell.configureInitial()
             return cell
-        } else {
+        } else if (indexPath.row != (playerStats.count + 2)){
             let cell = tableView.dequeueReusableCell(withIdentifier: "playerStats", for: indexPath) as! PlayerStatsTableViewCell
             cell.configureStats(forStats: self.playerStats[indexPath.row-2])
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "playerStats", for: indexPath) as! PlayerStatsTableViewCell
+                cell.configureAverges(forStats: self.playerStats)
             return cell
         }
     }

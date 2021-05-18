@@ -10,6 +10,11 @@ import AVFoundation
 
 class ViewController: UIViewController {
     var audio_player = AVAudioPlayer()
+    
+    
+    var old_images = [203095, 202691, 203503, 1628370, 1629690]
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -41,14 +46,18 @@ class ViewController: UIViewController {
         }
         let seconds = 2.0
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-            // Put your code which should be executed with a delay here
-            UIView.animate(withDuration: 4) {
-                self.InitialButton.tintColor = UIColor.systemBlue.withAlphaComponent(1.0)
+            self.fetchImageInfo()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                        UIView.animate(withDuration: 4) {
+                        self.InitialButton.tintColor = UIColor.systemBlue.withAlphaComponent(1.0)
+                        self.InitialButton.isEnabled = true
+                    }
                 self.InitialButton.isEnabled = true
             }
-            self.InitialButton.isEnabled = true
+            
         }
-        
+
     }
     @IBOutlet weak var SoundSwitch: UISwitch!
     @IBOutlet weak var ColorSwitch: UISwitch!
@@ -110,6 +119,18 @@ class ViewController: UIViewController {
         } else {
             self.overrideUserInterfaceStyle = .light
         }
+        
+        if self.ColorSwitch.isOn{
+            overrideUserInterfaceStyle = .dark
+            navigationController?.navigationBar.tintColor = .white
+            navigationController?.navigationBar.barTintColor = .black
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        } else {
+            overrideUserInterfaceStyle = .light
+            navigationController?.navigationBar.tintColor = .black
+            navigationController?.navigationBar.barTintColor = .white
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        }
     }
 
     @IBAction func toggleSound(_ sender: Any) {
@@ -166,6 +187,50 @@ class ViewController: UIViewController {
             downloadPlayerData(page: i) {
                 print("Successfully Download Page" + String(i))
                 }
+        }
+    }
+    
+    
+    func fetchImageInfo(){
+        guard let path = Bundle.main.path(forResource: "players", ofType: "json") else {return}
+        
+        let url = URL(fileURLWithPath: path)
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+            
+            guard let array = json as? [Any] else {return}
+            
+            for imagePlayer in array {
+                var is_old = false
+                guard let imageDict = imagePlayer as? [String: Any] else {return}
+                guard let first_name = imageDict["firstName"] as? String else {return}
+                guard let last_name = imageDict["lastName"] as? String else {return}
+                guard let playerId = imageDict["playerId"] as? Int else {return}
+                guard let teamId = imageDict["teamId"] as? Int else {return}
+                for i in 0...allPlayers.count-1 {
+                    if (imageDict["firstName"] as! String == allPlayers[i].first_name) && (imageDict["lastName"] as! String == allPlayers[i].last_name) {
+                        for i in 0...old_images.count-1 {
+                            if imageDict["playerId"] as? Int == old_images[i] {
+                                is_old = true
+                                break
+                            }
+                        }
+                        if (!is_old) {
+                            let url = "http://static.cms.nba.com/wp-content/uploads/headshots/nba/" + String((imageDict["teamId"] as? Int)!) + "/2020/260x190/" + String((imageDict["playerId"] as? Int)!) + ".png"
+                            allPlayers[i].imageUrl = url
+                           // print(url + "" + players.first_name)
+                        } else {
+                            let url = "http://static.cms.nba.com/wp-content/uploads/headshots/nba/" + String((imageDict["teamId"] as? Int)!) + "/2019/260x190/" + String((imageDict["playerId"] as? Int)!) + ".png"
+                            allPlayers[i].imageUrl = url
+                        }
+                        
+                    }
+                }
+            }
+        } catch {
+            print(error)
         }
     }
     
