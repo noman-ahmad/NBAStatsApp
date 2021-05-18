@@ -19,8 +19,8 @@ Compatability:
 - Devices Fully Working: any iPhone SE or better with iOS 13.0 
 - Devices Not Working Properly: iPod Touch, iPad Devices 
 
-Current Issues (v1.01): 
-- Player Images Missing for players after 2017-18 (API Limitation) 
+Current Issues (v1.04):  
+- Player Images Missing for Some Players (Most are now updated)  
 - Delay between view usage (API Limitation, currently the only workaround is to have delays) 
 - Team Images low res on Initial Team Selection View 
 - API Call Limit still occurs occasionally 
@@ -35,7 +35,7 @@ Future Features (may or may not be implemented):
 
 Framework & Technologies Used: 
 - Front End: Swift + UIKit (Using XCode) 
-- Back End: balldontlie api (www.balldontlie.io) 
+- Back End: balldontlie api (www.balldontlie.io), nba-api-client (https://github.com/bttmly/nba-client-template/blob/master/nba.json)
 - Other Frameworks: Kingfisher (for web image loading and caching -> https://github.com/onevcat/Kingfisher) 
 
 Built by Noman Ahmad
