@@ -77,7 +77,9 @@ class PreviousGamesTableViewCell: UITableViewCell {
         if forGame.postseason == true {
             playoffsImage.image = #imageLiteral(resourceName: "4741__nba_playoffs-primary_on_dark-2018")
             //playoffsImage.backgroundColor = .black
-        } 
+        } else {
+            playoffsImage.isHidden = true
+        }
     }
 
 }
